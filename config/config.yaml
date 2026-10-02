@@ -1,0 +1,48 @@
+# SupportPulse-Analytics — runtime configuration
+# Values may be overridden with environment variables prefixed SUPPORTPULSE_
+# e.g. SUPPORTPULSE_MOCK=true, SUPPORTPULSE_JIRA__API_TOKEN=xxx
+
+app:
+  name: "SupportPulse-Analytics"
+  version: "1.0.0"
+  mock_mode: true
+  output_dir: "examples/generated_reports"
+  timezone: "Europe/Berlin"
+  business_hours_per_day: 8.0
+
+jira:
+  base_url: "https://supportpulse.atlassian.net"
+  api_version: 3
+  email: "vinothofficial14@gmail.com"
+  api_token: ""            # supply via SUPPORTPULSE_JIRA__API_TOKEN
+  verify_ssl: true
+  timeout: 30
+  page_size: 50
+  max_retries: 4
+  backoff_factor: 0.75
+  rate_limit_pause: 2.0
+  fields:
+    - key
+    - summary
+    - priority
+    - status
+    - created
+    - resolutiondate
+    - assignee
+    - components
+    - labels
+
+project:
+  key: "SUP"
+  name: "Enterprise Software Support"
+  default_days: 30
+  support_tiers:
+    - "Tier 1"
+    - "Tier 2"
+    - "Development"
+
+forecasting:
+  imminent_risk_threshold: 60.0
+  critical_risk_threshold: 85.0
+  minimum_history_samples: 8
+  ping_pong_threshold: 3

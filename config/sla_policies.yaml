@@ -1,0 +1,24 @@
+# Service Level Agreement policies, expressed in business hours.
+# Response = first meaningful human response on the ticket.
+# Resolution = time from creation to the Resolved status.
+name: "Enterprise Software Support SLA 2026"
+business_hours_per_day: 8.0
+business_days: [0, 1, 2, 3, 4]   # Monday..Friday (Python weekday indexes)
+
+targets:
+  P1-Critical:
+    response_hours: 1.0
+    resolution_hours: 8.0
+    escalation_hours: 4.0
+  P2-High:
+    response_hours: 4.0
+    resolution_hours: 24.0
+    escalation_hours: 16.0
+  P3-Medium:
+    response_hours: 8.0
+    resolution_hours: 56.0
+    escalation_hours: 40.0
+  P4-Low:
+    response_hours: 16.0
+    resolution_hours: 120.0
+    escalation_hours: 96.0
