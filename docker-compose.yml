@@ -1,0 +1,28 @@
+services:
+  supportpulse-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: supportpulse-analytics:1.0.0
+    container_name: supportpulse-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      SUPPORTPULSE_MOCK: "true"
+      SUPPORTPULSE_OUTPUT_DIR: "/app/examples/generated_reports"
+    volumes:
+      - ./examples:/app/examples
+      - ./config:/app/config:ro
+    restart: unless-stopped
+
+  supportpulse-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: supportpulse-analytics:1.0.0
+    container_name: supportpulse-cli
+    profiles: ["cli"]
+    entrypoint: ["supportpulse"]
+    command: ["--help"]
+    volumes:
+      - ./examples:/app/examples

@@ -1,0 +1,115 @@
+stages:
+  - lint
+  - test
+  - build
+  - pages
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHON_VERSION: "3.12"
+
+default:
+  image: python:${PYTHON_VERSION}-slim
+  cache:
+    key:
+      files:
+        - pyproject.toml
+    paths:
+      - .cache/pip/
+
+# ---------------------------------------------------------------------------
+# Lint
+# ---------------------------------------------------------------------------
+lint:python:
+  stage: lint
+  before_script:
+    - pip install --upgrade pip
+    - pip install ruff
+  script:
+    - ruff check src tests scripts
+    - ruff format --check src tests scripts || true
+  allow_failure: false
+
+lint:types:
+  stage: lint
+  before_script:
+    - pip install --upgrade pip
+    - pip install . mypy types-PyYAML
+  script:
+    - mypy src/supportpulse --ignore-missing-imports || true
+  allow_failure: true
+
+# ---------------------------------------------------------------------------
+# Test
+# ---------------------------------------------------------------------------
+test:pytest:
+  stage: test
+  before_script:
+    - pip install --upgrade pip
+    - pip install -e ".[dev]"
+  script:
+    - pytest --cov=supportpulse --cov-report=term-missing --cov-report=xml:coverage.xml --cov-fail-under=88
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+      - htmlcov/
+    expire_in: 1 week
+
+# ---------------------------------------------------------------------------
+# Build
+# ---------------------------------------------------------------------------
+build:docker:
+  stage: build
+  image: docker:27-cli
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  before_script:
+    - docker info
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+build:package:
+  stage: build
+  before_script:
+    - pip install --upgrade pip build
+  script:
+    - python -m build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+# ---------------------------------------------------------------------------
+# Pages (publish SVG screenshots + coverage)
+# ---------------------------------------------------------------------------
+pages:
+  stage: pages
+  before_script:
+    - pip install --upgrade pip
+    - pip install -e ".[dev]"
+  script:
+    - pytest --cov=supportpulse --cov-report=html:htmlcov
+    - python scripts/generate_screenshots.py
+    - mkdir -p public
+    - cp -r htmlcov/* public/ || true
+    - cp -r docs/screenshots public/screenshots || true
+    - echo "<meta http-equiv='refresh' content='0; url=./htmlcov/index.html'>" > public/index.html
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
