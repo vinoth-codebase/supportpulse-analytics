@@ -76,7 +76,7 @@ flowchart LR
 
 ---
 
-## Skills Matrix — Rohde & Schwarz (Software Support)
+## Skills Matrix
 
 | Qualification | Where it is demonstrated in this repository |
 | --- | --- |
