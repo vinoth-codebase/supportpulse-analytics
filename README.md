@@ -76,19 +76,6 @@ flowchart LR
 
 ---
 
-## Skills Matrix
-
-| Qualification | Where it is demonstrated in this repository |
-| --- | --- |
-| **Jira automation & REST APIs** | `extractor/jira_client.py` — authenticated REST v2/v3 client, JQL construction (`jql_builder.py`), pagination, retry/back-off, changelog retrieval. |
-| **Python data analysis** | `analytics/` — pandas/NumPy KPI engine, ECDFs, percentiles, and a statistical breach-risk model (`sla_forecaster.py`). |
-| **MS Office report synthesis** | `reporters/excel_reporter.py` (openpyxl multi-tab workbook, conditional-formatting heatmaps) and `reporters/pptx_reporter.py` (python-pptx executive deck with native charts). |
-| **Visual management & Lean flow** | `dashboard/` — Cumulative Flow Diagram, WIP tracking, aging WIP and a colour-coded SLA breach radar. |
-| **Software support concepts** | SLA policies per priority (`config/sla_policies.yaml`), MTTR/MTTD/FCR, first-contact resolution, escalation runway and tier ping-pong analysis. |
-| **Knowledge-base publishing** | `reporters/confluence_exporter.py` — Confluence Storage Format (XHTML) with status macros, plus Markdown. |
-| **Engineering rigour** | Typed Pydantic models, GitLab CI (lint → test → build → pages), Docker/compose, and a pytest suite at **97%** coverage. |
-
----
 
 ## Visual Previews
 
