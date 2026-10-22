@@ -77,26 +77,6 @@ flowchart LR
 ---
 
 
-## Visual Previews
-
-**1 · Jira extraction pipeline — JQL pagination & rate-limit handling**
-
-![Jira extraction pipeline](docs/screenshots/jira_extraction_pipeline.svg)
-
-**2 · SLA forecaster analytics — MTTR, cycle-time percentiles & breach warnings**
-
-![SLA forecaster analytics](docs/screenshots/sla_forecaster_analytics.svg)
-
-**3 · Visual management dashboard — CFD, WIP & breach radar**
-
-![Visual management dashboard](docs/screenshots/visual_management_dashboard.svg)
-
-**4 · Automated Office reports — workbook & deck generation**
-
-![Office reports preview](docs/screenshots/office_reports_preview.svg)
-
----
-
 ## Quickstart
 
 ```bash
